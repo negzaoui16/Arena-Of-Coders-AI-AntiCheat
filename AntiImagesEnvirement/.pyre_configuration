@@ -1,0 +1,7 @@
+{
+  "site_package_search_strategy": "pep503",
+  "source_directories": ["."],
+  "search_path": [
+    "C:\\Users\\Negza\\Desktop\\PIM_Negzaoui\\Mobile\\MOBILE\\Modele_Check_Point\\AntiImagesEnvirement\\.venv\\Lib\\site-packages"
+  ]
+}

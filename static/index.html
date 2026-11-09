@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Checkpoint Validator</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-top: #0f172a;
+            --bg-bottom: #1e293b;
+            --primary: #3b82f6;
+            --primary-glow: rgba(59, 130, 246, 0.5);
+            --success: #10b981;
+            --error: #ef4444;
+            --card-bg: rgba(255, 255, 255, 0.05);
+            --card-border: rgba(255, 255, 255, 0.1);
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, var(--bg-top), var(--bg-bottom));
+            color: var(--text-main);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 600px;
+            padding: 2rem;
+            box-sizing: border-box;
+        }
+
+        .glass-card {
+            background: var(--card-bg);
+            backdrop-filter: blur(12px);
+            border: 1px solid var(--card-border);
+            border-radius: 24px;
+            padding: 2.5rem;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        h1 {
+            font-weight: 800;
+            font-size: 2rem;
+            margin-top: 0;
+            margin-bottom: 0.5rem;
+            text-align: center;
+            background: linear-gradient(to right, #60a5fa, #a78bfa);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        p.subtitle {
+            text-align: center;
+            color: var(--text-muted);
+            margin-bottom: 2rem;
+            font-weight: 400;
+        }
+
+        .upload-area {
+            border: 2px dashed var(--card-border);
+            border-radius: 16px;
+            padding: 3rem 2rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            background: rgba(0, 0, 0, 0.2);
+        }
+
+        .upload-area:hover,
+        .upload-area.dragover {
+            border-color: var(--primary);
+            background: rgba(59, 130, 246, 0.05);
+            box-shadow: 0 0 20px var(--primary-glow);
+        }
+
+        .upload-area input[type="file"] {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            cursor: pointer;
+        }
+
+        .upload-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            filter: grayscale(100%);
+            transition: filter 0.3s ease;
+        }
+
+        .upload-area:hover .upload-icon {
+            filter: grayscale(0%);
+        }
+
+        .upload-text {
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .upload-hint {
+            color: var(--text-muted);
+            font-size: 0.85rem;
+        }
+
+        .preview-container {
+            display: none;
+            margin-top: 2rem;
+            text-align: center;
+        }
+
+        .preview-image {
+            max-width: 100%;
+            max-height: 250px;
+            border-radius: 12px;
+            border: 1px solid var(--card-border);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3);
+            object-fit: contain;
+        }
+
+        .btn {
+            display: inline-block;
+            width: 100%;
+            padding: 1rem;
+            margin-top: 1.5rem;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 14px 0 var(--primary-glow);
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px 0 var(--primary-glow);
+        }
+
+        .btn:disabled {
+            background: var(--text-muted);
+            box-shadow: none;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--text-main);
+            box-shadow: none;
+            margin-top: 0.75rem;
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.2);
+            box-shadow: 0 4px 14px 0 rgba(255, 255, 255, 0.1);
+        }
+
+        .btn-secondary:disabled {
+            background: rgba(255, 255, 255, 0.05);
+            color: rgba(255, 255, 255, 0.3);
+        }
+
+        /* Results matching */
+        .result-container {
+            display: none;
+            margin-top: 2rem;
+            padding: 1.5rem;
+            border-radius: 16px;
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid var(--card-border);
+            animation: slideUp 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .result-header {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+        }
+
+        .result-header.accepted {
+            color: var(--success);
+        }
+
+        .result-header.rejected {
+            color: var(--error);
+        }
+
+        .score-bar-bg {
+            width: 100%;
+            height: 12px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 6px;
+            overflow: hidden;
+            margin-bottom: 0.5rem;
+        }
+
+        .score-bar-fill {
+            height: 100%;
+            width: 0%;
+            border-radius: 6px;
+            transition: width 1s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+
+        .score-bar-fill.accepted {
+            background: var(--success);
+            box-shadow: 0 0 10px var(--success);
+        }
+
+        .score-bar-fill.rejected {
+            background: var(--error);
+            box-shadow: 0 0 10px var(--error);
+        }
+
+        .details-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin-top: 1rem;
+            font-size: 0.85rem;
+        }
+
+        .detail-box {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 0.75rem;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .detail-label {
+            color: var(--text-muted);
+            margin-bottom: 0.25rem;
+            display: block;
+        }
+
+        .detail-value {
+            font-weight: 600;
+            font-size: 1rem;
+        }
+
+        .loader {
+            display: none;
+            text-align: center;
+            margin-top: 1.5rem;
+        }
+
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid rgba(255, 255, 255, 0.1);
+            border-top-color: var(--primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto;
+        }
+
+        @keyframes spin {
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+        <div class="glass-card">
+            <h1>Checkpoint Validator AI</h1>
+            <p class="subtitle">Hackathon Environment Scanner</p>
+
+            <form id="uploadForm">
+                <div class="upload-area" id="dropZone">
+                    <input type="file" id="imageInput" accept="image/*" required>
+                    <div class="upload-icon">📸</div>
+                    <div class="upload-text">Glissez ou cliquez pour déposer une image</div>
+                    <div class="upload-hint">JPG, PNG (Max 5MB)</div>
+                </div>
+
+                <div class="preview-container" id="previewContainer">
+                    <img id="imagePreview" class="preview-image" src="" alt="Preview">
+                </div>
+
+                <button type="submit" class="btn" id="submitBtn" disabled>Scan l'environnement</button>
+                <button type="button" class="btn btn-secondary" id="learnBtn" style="display: none;">🧠 Forcer
+                    l'apprentissage (Admin)</button>
+            </form>
+
+            <div class="loader" id="loader">
+                <div class="spinner"></div>
+                <p style="color: var(--text-muted); margin-top: 1rem;">Analyse IA en cours, veuillez patienter...</p>
+            </div>
+
+            <div class="result-container" id="resultContainer">
+                <div class="result-header" id="resultStatus"></div>
+                <div class="score-bar-bg">
+                    <div class="score-bar-fill" id="scoreBar"></div>
+                </div>
+                <div style="text-align: center; font-weight: 800; font-size: 1.25rem;" id="scoreText"></div>
+                <div style="text-align: center; color: var(--text-muted); font-size: 0.9rem; margin-top: 0.5rem;"
+                    id="resultMessage"></div>
+
+                <div class="details-grid">
+                    <div class="detail-box">
+                        <span class="detail-label">Score Zero-Shot</span>
+                        <span class="detail-value" id="zsScore">--</span>
+                    </div>
+                    <div class="detail-box">
+                        <span class="detail-label">Bonus Mémoire</span>
+                        <span class="detail-value" style="color: #60a5fa;" id="memBonus">--</span>
+                    </div>
+                    <div class="detail-box" style="grid-column: 1 / -1;">
+                        <span class="detail-label">L'IA voit :</span>
+                        <span class="detail-value" style="color: #a78bfa;" id="topLabel">--</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const imageInput = document.getElementById('imageInput');
+        const imagePreview = document.getElementById('imagePreview');
+        const previewContainer = document.getElementById('previewContainer');
+        const submitBtn = document.getElementById('submitBtn');
+        const learnBtn = document.getElementById('learnBtn');
+        const dropZone = document.getElementById('dropZone');
+        const uploadForm = document.getElementById('uploadForm');
+
+        // UI Elements for result
+        const resultContainer = document.getElementById('resultContainer');
+        const loader = document.getElementById('loader');
+        const resultStatus = document.getElementById('resultStatus');
+        const scoreBar = document.getElementById('scoreBar');
+        const scoreText = document.getElementById('scoreText');
+        const resultMessage = document.getElementById('resultMessage');
+        const zsScore = document.getElementById('zsScore');
+        const memBonus = document.getElementById('memBonus');
+        const topLabel = document.getElementById('topLabel');
+
+        // Drag and drop effects
+        dropZone.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            dropZone.classList.add('dragover');
+        });
+        dropZone.addEventListener('dragleave', () => dropZone.classList.remove('dragover'));
+        dropZone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            dropZone.classList.remove('dragover');
+            if (e.dataTransfer.files.length) {
+                imageInput.files = e.dataTransfer.files;
+                handleImageChange();
+            }
+        });
+
+        imageInput.addEventListener('change', handleImageChange);
+
+        function handleImageChange() {
+            resultContainer.style.display = 'none';
+
+            if (imageInput.files && imageInput.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    imagePreview.src = e.target.result;
+                    previewContainer.style.display = 'block';
+                    submitBtn.disabled = false;
+                    learnBtn.style.display = 'inline-block';
+                    learnBtn.disabled = false;
+                }
+                reader.readAsDataURL(imageInput.files[0]);
+            }
+        }
+
+        uploadForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            if (!imageInput.files[0]) return;
+
+            // UI Reset
+            submitBtn.style.display = 'none';
+            loader.style.display = 'block';
+            resultContainer.style.display = 'none';
+            scoreBar.style.width = '0%';
+
+            const formData = new FormData();
+            formData.append('image', imageInput.files[0]);
+
+            try {
+                const response = await fetch('/scan', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                const data = await response.json();
+                showResult(data);
+
+            } catch (error) {
+                alert('Erreur de connexion au serveur IA.');
+                submitBtn.style.display = 'block';
+                loader.style.display = 'none';
+            }
+        });
+
+        function showResult(data) {
+            loader.style.display = 'none';
+            submitBtn.style.display = 'inline-block';
+            submitBtn.textContent = "Analyser une autre image";
+            resultContainer.style.display = 'block';
+
+            const isAccepted = data.accepte;
+
+            // Reset classes
+            resultStatus.className = 'result-header ' + (isAccepted ? 'accepted' : 'rejected');
+            scoreBar.className = 'score-bar-fill ' + (isAccepted ? 'accepted' : 'rejected');
+
+            resultStatus.innerHTML = isAccepted ? '✔️ CHECKPOINT VALIDÉ' : '❌ CHECKPOINT REFUSÉ';
+            resultMessage.textContent = data.message;
+
+            // Animate Score
+            setTimeout(() => {
+                scoreBar.style.width = data.confiance + '%';
+            }, 100);
+
+            scoreText.textContent = data.confiance + '%';
+
+            if (data.details) {
+                zsScore.textContent = data.details.zero_shot_score + '%';
+                memBonus.textContent = '+' + data.details.memory_bonus + '%';
+                topLabel.textContent = '"' + data.details.top_label + '"';
+            } else {
+                zsScore.textContent = '--';
+                memBonus.textContent = '--';
+                topLabel.textContent = '--';
+            }
+        }
+
+        learnBtn.addEventListener('click', async () => {
+            if (!imageInput.files[0]) return;
+
+            learnBtn.disabled = true;
+            learnBtn.textContent = "Apprentissage en cours...";
+
+            const formData = new FormData();
+            formData.append('image', imageInput.files[0]);
+
+            try {
+                const response = await fetch('/learn', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                const data = await response.json();
+                if (data.status === "success") {
+                    alert('✅ Succès : L\'IA a mémorisé cette image ! (Mémoire totale: ' + data.total_memory + ' images)');
+                    learnBtn.textContent = "🧠 Image Apprise !";
+                } else {
+                    alert('Erreur: ' + data.detail);
+                    learnBtn.disabled = false;
+                    learnBtn.textContent = "🧠 Forcer l'apprentissage (Admin)";
+                }
+
+            } catch (error) {
+                alert('Erreur de connexion au serveur IA.');
+                learnBtn.disabled = false;
+                learnBtn.textContent = "🧠 Forcer l'apprentissage (Admin)";
+            }
+        });
+    </script>
+
+</body>
+
+</html>
