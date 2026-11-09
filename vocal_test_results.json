@@ -1,0 +1,24 @@
+[
+    {
+        "accepte": true,
+        "confiance": 79.57,
+        "transcription": "J'ai travaillé à Modé à Dui AI qui analysait le vocal et bonnet et le groson-tout à cette vocal, il est ici au nom d'en Hakatan.",
+        "details": {
+            "top_label": "correction d'un bug ou problème technique",
+            "is_work": 0.7956957221031189
+        },
+        "message": "Accepté ! ✅ (Score : 79.57%)",
+        "file": "Enregistrement (3).m4a"
+    },
+    {
+        "accepte": false,
+        "confiance": 94.44,
+        "transcription": "وانا اصنعوزك استينعي دي حلالا الى سوات واطائي نتيجة الى اصعوط",
+        "details": {
+            "top_label": "parler de dormir ou faire une sieste",
+            "is_work": 0.9443596601486206
+        },
+        "message": "Refusé ❌. Je détecte plutôt : 'parler de dormir ou faire une sieste'. (Score : 94.44%)",
+        "file": "Enregistrement (4).m4a"
+    }
+]

@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Voice Checkpoint Validator</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-top: #1e1b4b;
+            --bg-bottom: #312e81;
+            --primary: #8b5cf6;
+            --primary-glow: rgba(139, 92, 246, 0.5);
+            --success: #10b981;
+            --error: #ef4444;
+            --card-bg: rgba(255, 255, 255, 0.05);
+            --card-border: rgba(255, 255, 255, 0.1);
+            --text-main: #f8fafc;
+            --text-muted: #c7d2fe;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, var(--bg-top), var(--bg-bottom));
+            color: var(--text-main);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 600px;
+            padding: 2rem;
+            box-sizing: border-box;
+        }
+
+        .glass-card {
+            background: var(--card-bg);
+            backdrop-filter: blur(12px);
+            border: 1px solid var(--card-border);
+            border-radius: 24px;
+            padding: 2.5rem;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+        }
+
+        h1 {
+            font-weight: 800;
+            font-size: 2rem;
+            margin-top: 0;
+            margin-bottom: 0.5rem;
+            text-align: center;
+            background: linear-gradient(to right, #c084fc, #f472b6);
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        p.subtitle {
+            text-align: center;
+            color: var(--text-muted);
+            margin-bottom: 2rem;
+        }
+
+        .upload-area {
+            border: 2px dashed var(--card-border);
+            border-radius: 16px;
+            padding: 3rem 2rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            background: rgba(0, 0, 0, 0.2);
+        }
+
+        .upload-area:hover,
+        .upload-area.dragover {
+            border-color: var(--primary);
+            background: rgba(139, 92, 246, 0.05);
+            box-shadow: 0 0 20px var(--primary-glow);
+        }
+
+        .upload-area input[type="file"] {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            cursor: pointer;
+        }
+
+        .upload-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .audio-player-container {
+            display: none;
+            margin-top: 1.5rem;
+            text-align: center;
+        }
+
+        audio {
+            width: 100%;
+            border-radius: 8px;
+            outline: none;
+        }
+
+        .btn {
+            display: inline-block;
+            width: 100%;
+            padding: 1rem;
+            margin-top: 1.5rem;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 14px 0 var(--primary-glow);
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px 0 var(--primary-glow);
+        }
+
+        .btn:disabled {
+            background: var(--text-muted);
+            box-shadow: none;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.1);
+            color: #f8fafc;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: none;
+            margin-top: 1rem;
+            font-size: 0.9rem;
+            padding: 0.75rem;
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.2);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            transform: translateY(-2px);
+        }
+
+        /* Results matching */
+        .result-container {
+            display: none;
+            margin-top: 2rem;
+            padding: 1.5rem;
+            border-radius: 16px;
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid var(--card-border);
+        }
+
+        .result-header {
+            text-align: center;
+            font-size: 1.25rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+        }
+
+        .result-header.accepted {
+            color: var(--success);
+        }
+
+        .result-header.rejected {
+            color: var(--error);
+        }
+
+        .transcript-box {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 1rem;
+            border-radius: 8px;
+            font-style: italic;
+            color: #f8fafc;
+            margin-top: 1rem;
+            margin-bottom: 1rem;
+            border-left: 4px solid var(--primary);
+        }
+
+        .score-bar-bg {
+            width: 100%;
+            height: 12px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 6px;
+            overflow: hidden;
+            margin-bottom: 0.5rem;
+        }
+
+        .score-bar-fill {
+            height: 100%;
+            width: 0%;
+            border-radius: 6px;
+            transition: width 1s ease;
+        }
+
+        .score-bar-fill.accepted {
+            background: var(--success);
+        }
+
+        .score-bar-fill.rejected {
+            background: var(--error);
+        }
+
+        .loader {
+            display: none;
+            text-align: center;
+            margin-top: 1.5rem;
+        }
+
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid rgba(255, 255, 255, 0.1);
+            border-top-color: var(--primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto;
+        }
+
+        @keyframes spin {
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+        <div class="glass-card">
+            <h1>Voice Checkpoint AI</h1>
+            <p class="subtitle">Analyse audio anti-triche (Speech-to-Text & NLP)</p>
+
+            <form id="uploadForm">
+                <div class="upload-area" id="dropZone">
+                    <input type="file" id="audioInput" accept="audio/*" required>
+                    <div class="upload-icon">🎙️</div>
+                    <div style="font-weight: 600; margin-bottom: 0.5rem;">Déposer un fichier Vocal</div>
+                    <div style="font-size: 0.85rem; color: var(--text-muted);">MP3, WAV, M4A</div>
+                </div>
+
+                <div class="audio-player-container" id="playerContainer">
+                    <audio id="audioPreview" controls></audio>
+                </div>
+
+                <button type="submit" class="btn" id="submitBtn" disabled>Écouter et Analyser</button>
+            </form>
+
+            <div class="loader" id="loader">
+                <div class="spinner"></div>
+                <p style="color: var(--text-muted); margin-top: 1rem;">L'IA écoute l'audio... (Cela peut prendre qq
+                    secondes)</p>
+            </div>
+
+            <div class="result-container" id="resultContainer">
+                <div class="result-header" id="resultStatus"></div>
+
+                <div class="transcript-box">
+                    <strong
+                        style="color: var(--text-muted); font-size: 0.8rem; text-transform: uppercase;">Transcription
+                        :</strong><br>
+                    <span id="transcriptionText">"..."</span>
+                </div>
+
+                <div class="score-bar-bg">
+                    <div class="score-bar-fill" id="scoreBar"></div>
+                </div>
+
+                <div style="display: flex; justify-content: space-between; margin-top: 0.5rem; font-size: 0.9rem;">
+                    <span style="color: var(--text-muted);">Score de Travail :</span>
+                    <strong id="scoreText"></strong>
+                </div>
+
+                <div style="margin-top: 1rem; color: #f472b6; font-size: 0.9rem; text-align: center;">
+                    Sujet détecté : <strong id="topLabel"></strong>
+                </div>
+
+                <button id="learnBtn" class="btn btn-secondary" style="display: none; width: 100%;">
+                    🧠 Forcer l'apprentissage (Admin)
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const audioInput = document.getElementById('audioInput');
+        const playerContainer = document.getElementById('playerContainer');
+        const audioPreview = document.getElementById('audioPreview');
+        const submitBtn = document.getElementById('submitBtn');
+        const uploadForm = document.getElementById('uploadForm');
+
+        // UI Result Elements
+        const resultContainer = document.getElementById('resultContainer');
+        const loader = document.getElementById('loader');
+        const resultStatus = document.getElementById('resultStatus');
+        const scoreBar = document.getElementById('scoreBar');
+        const scoreText = document.getElementById('scoreText');
+        const transcriptionText = document.getElementById('transcriptionText');
+        const topLabel = document.getElementById('topLabel');
+        const learnBtn = document.getElementById('learnBtn');
+
+        let currentTranscription = "";
+
+        audioInput.addEventListener('change', () => {
+            resultContainer.style.display = 'none';
+            if (audioInput.files && audioInput.files[0]) {
+                const file = audioInput.files[0];
+                const url = URL.createObjectURL(file);
+                audioPreview.src = url;
+                playerContainer.style.display = 'block';
+                submitBtn.disabled = false;
+            }
+        });
+
+        uploadForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            if (!audioInput.files[0]) return;
+
+            submitBtn.style.display = 'none';
+            loader.style.display = 'block';
+            resultContainer.style.display = 'none';
+            scoreBar.style.width = '0%';
+            learnBtn.style.display = 'none';
+            currentTranscription = "";
+
+            const formData = new FormData();
+            formData.append('audio', audioInput.files[0]);
+
+            try {
+                const response = await fetch('/scan-audio', {
+                    method: 'POST',
+                    body: formData
+                });
+                const data = await response.json();
+
+                loader.style.display = 'none';
+                submitBtn.style.display = 'block';
+                submitBtn.textContent = "Analyser un autre vocal";
+                resultContainer.style.display = 'block';
+
+                const isAccepted = data.accepte;
+                resultStatus.className = 'result-header ' + (isAccepted ? 'accepted' : 'rejected');
+                scoreBar.className = 'score-bar-fill ' + (isAccepted ? 'accepted' : 'rejected');
+
+                resultStatus.innerHTML = isAccepted ? '✔️ AUDIO VALIDÉ' : '❌ AUDIO REFUSÉ';
+
+                // Populate data
+                currentTranscription = data.transcription;
+                transcriptionText.textContent = '"' + data.transcription + '"';
+                scoreText.textContent = data.confiance + '%';
+
+                setTimeout(() => {
+                    scoreBar.style.width = data.confiance + '%';
+                }, 100);
+
+                if (data.details) {
+                    topLabel.textContent = data.details.top_label;
+                } else {
+                    topLabel.textContent = data.message;
+                }
+
+                // Show learn button if rejected
+                if (!isAccepted && currentTranscription && currentTranscription.length > 5) {
+                    learnBtn.style.display = 'block';
+                    learnBtn.textContent = "🧠 Forcer l'apprentissage (Admin)";
+                    learnBtn.disabled = false;
+                }
+
+            } catch (error) {
+                alert('Erreur: Impossible de connecter au serveur.');
+                submitBtn.style.display = 'block';
+                loader.style.display = 'none';
+            }
+        });
+
+        learnBtn.addEventListener('click', async () => {
+            if (!currentTranscription) return;
+
+            learnBtn.disabled = true;
+            learnBtn.textContent = "Apprentissage en cours...";
+
+            const formData = new FormData();
+            formData.append('text', currentTranscription);
+
+            try {
+                const response = await fetch('/learn-audio', {
+                    method: 'POST',
+                    body: formData
+                });
+                const data = await response.json();
+
+                if (data.success) {
+                    learnBtn.textContent = "✅ Mémorisé ! Relancez l'analyse.";
+                    learnBtn.style.background = "var(--success)";
+                    learnBtn.style.color = "white";
+                } else {
+                    alert("Erreur: " + data.message);
+                    learnBtn.disabled = false;
+                    learnBtn.textContent = "🧠 Forcer l'apprentissage (Admin)";
+                }
+            } catch (error) {
+                alert("Erreur de connexion lors de l'apprentissage.");
+                learnBtn.disabled = false;
+                learnBtn.textContent = "🧠 Forcer l'apprentissage (Admin)";
+            }
+        });
+    </script>
+</body>
+
+</html>
