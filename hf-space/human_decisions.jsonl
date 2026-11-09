@@ -1,0 +1,80 @@
+{"submission_id": "sub_8681770874", "timestamp": "2026-02-01T22:28:31.750733Z", "human_label": 0, "comment": "Test script"}
+{"submission_id": "sub_4482351528", "timestamp": "2026-02-01T22:30:06.045754Z", "human_label": 0, "comment": "seed #1"}
+{"submission_id": "sub_8159981660", "timestamp": "2026-02-01T22:30:07.067687Z", "human_label": 0, "comment": "seed #2"}
+{"submission_id": "sub_4140969005", "timestamp": "2026-02-01T22:30:08.083611Z", "human_label": 0, "comment": "seed #3"}
+{"submission_id": "sub_2625055958", "timestamp": "2026-02-01T22:30:09.107838Z", "human_label": 0, "comment": "seed #4"}
+{"submission_id": "sub_6109090054", "timestamp": "2026-02-01T22:30:10.121455Z", "human_label": 0, "comment": "seed #5"}
+{"submission_id": "sub_8442104103", "timestamp": "2026-02-01T22:30:11.134987Z", "human_label": 0, "comment": "seed #6"}
+{"submission_id": "sub_2133715600", "timestamp": "2026-02-01T22:30:12.175701Z", "human_label": 0, "comment": "seed #7"}
+{"submission_id": "sub_9902973055", "timestamp": "2026-02-01T22:30:13.189856Z", "human_label": 0, "comment": "seed #8"}
+{"submission_id": "sub_4520246199", "timestamp": "2026-02-01T22:30:14.212083Z", "human_label": 0, "comment": "seed #9"}
+{"submission_id": "sub_90630097", "timestamp": "2026-02-01T22:30:15.223471Z", "human_label": 0, "comment": "seed #10"}
+{"submission_id": "sub_4482351528", "timestamp": "2026-02-01T22:30:21.001957Z", "human_label": 0, "comment": "Test script"}
+{"submission_id": "sub_9569651498", "timestamp": "2026-02-01T22:32:01.554346Z", "human_label": 0, "comment": "seed #1 OK"}
+{"submission_id": "sub_4942938556", "timestamp": "2026-02-01T22:32:02.626417Z", "human_label": 0, "comment": "seed #2 OK"}
+{"submission_id": "sub_3986371275", "timestamp": "2026-02-01T22:32:03.655921Z", "human_label": 0, "comment": "seed #3 OK"}
+{"submission_id": "sub_3482176726", "timestamp": "2026-02-01T22:32:04.684134Z", "human_label": 0, "comment": "seed #4 OK"}
+{"submission_id": "sub_5512048764", "timestamp": "2026-02-01T22:32:05.731446Z", "human_label": 0, "comment": "seed #5 OK"}
+{"submission_id": "sub_6881697806", "timestamp": "2026-02-01T22:32:06.801612Z", "human_label": 0, "comment": "seed #6 OK"}
+{"submission_id": "sub_5919264067", "timestamp": "2026-02-01T22:32:07.829198Z", "human_label": 1, "comment": "seed #7 CHEAT"}
+{"submission_id": "sub_2508525368", "timestamp": "2026-02-01T22:32:08.864947Z", "human_label": 1, "comment": "seed #8 CHEAT"}
+{"submission_id": "sub_4380951567", "timestamp": "2026-02-01T22:32:09.912094Z", "human_label": 1, "comment": "seed #9 CHEAT"}
+{"submission_id": "sub_4370665457", "timestamp": "2026-02-01T22:32:10.955589Z", "human_label": 1, "comment": "seed #10 CHEAT"}
+{"submission_id": "sub_4400447339", "timestamp": "2026-02-01T22:32:12.001827Z", "human_label": 1, "comment": "seed #11 CHEAT"}
+{"submission_id": "sub_5911494751", "timestamp": "2026-02-01T22:32:13.024313Z", "human_label": 1, "comment": "seed #12 CHEAT"}
+{"submission_id": "sub_4978070449", "timestamp": "2026-02-01T22:32:18.123999Z", "human_label": 0, "comment": "Test script"}
+{"submission_id": "sub_683319569", "timestamp": "2026-02-01T22:33:45.187778Z", "human_label": 0, "comment": "seed #1 OK"}
+{"submission_id": "sub_9547461331", "timestamp": "2026-02-01T22:33:46.211354Z", "human_label": 0, "comment": "seed #2 OK"}
+{"submission_id": "sub_3421408251", "timestamp": "2026-02-01T22:33:47.229749Z", "human_label": 0, "comment": "seed #3 OK"}
+{"submission_id": "sub_8947588523", "timestamp": "2026-02-01T22:33:48.236960Z", "human_label": 0, "comment": "seed #4 OK"}
+{"submission_id": "sub_4332252844", "timestamp": "2026-02-01T22:33:49.252834Z", "human_label": 0, "comment": "seed #5 OK"}
+{"submission_id": "sub_4555888285", "timestamp": "2026-02-01T22:33:50.263716Z", "human_label": 0, "comment": "seed #6 OK"}
+{"submission_id": "sub_3471750946", "timestamp": "2026-02-01T22:33:51.281135Z", "human_label": 1, "comment": "seed #7 CHEAT"}
+{"submission_id": "sub_391691370", "timestamp": "2026-02-01T22:33:52.303557Z", "human_label": 1, "comment": "seed #8 CHEAT"}
+{"submission_id": "sub_4571552356", "timestamp": "2026-02-01T22:33:53.332563Z", "human_label": 1, "comment": "seed #9 CHEAT"}
+{"submission_id": "sub_8529984403", "timestamp": "2026-02-01T22:33:54.367295Z", "human_label": 1, "comment": "seed #10 CHEAT"}
+{"submission_id": "sub_7577648220", "timestamp": "2026-02-01T22:33:55.405522Z", "human_label": 1, "comment": "seed #11 CHEAT"}
+{"submission_id": "sub_7692031589", "timestamp": "2026-02-01T22:33:56.406864Z", "human_label": 1, "comment": "seed #12 CHEAT"}
+{"submission_id": "sub_683319569", "timestamp": "2026-02-01T22:33:57.933630Z", "human_label": 0, "comment": "run_all_3"}
+{"submission_id": "sub_9138457632", "timestamp": "2026-02-01T22:43:48.631373Z", "human_label": 0, "comment": "seed #1 OK"}
+{"submission_id": "sub_800305064", "timestamp": "2026-02-01T22:43:49.666019Z", "human_label": 0, "comment": "seed #2 OK"}
+{"submission_id": "sub_5680645601", "timestamp": "2026-02-01T22:43:51.100964Z", "human_label": 0, "comment": "seed #3 OK"}
+{"submission_id": "sub_594303137", "timestamp": "2026-02-01T22:43:52.109620Z", "human_label": 0, "comment": "seed #4 OK"}
+{"submission_id": "sub_4063041409", "timestamp": "2026-02-01T22:43:53.111031Z", "human_label": 0, "comment": "seed #5 OK"}
+{"submission_id": "sub_1596288684", "timestamp": "2026-02-01T22:43:54.126377Z", "human_label": 0, "comment": "seed #6 OK"}
+{"submission_id": "sub_7135436127", "timestamp": "2026-02-01T22:43:55.158201Z", "human_label": 1, "comment": "seed #7 CHEAT"}
+{"submission_id": "sub_2959226045", "timestamp": "2026-02-01T22:43:56.207426Z", "human_label": 1, "comment": "seed #8 CHEAT"}
+{"submission_id": "sub_2832763485", "timestamp": "2026-02-01T22:43:57.220445Z", "human_label": 1, "comment": "seed #9 CHEAT"}
+{"submission_id": "sub_9066941018", "timestamp": "2026-02-01T22:43:58.247041Z", "human_label": 1, "comment": "seed #10 CHEAT"}
+{"submission_id": "sub_3525094079", "timestamp": "2026-02-01T22:43:59.271060Z", "human_label": 1, "comment": "seed #11 CHEAT"}
+{"submission_id": "sub_208290196", "timestamp": "2026-02-01T22:44:00.309544Z", "human_label": 1, "comment": "seed #12 CHEAT"}
+{"submission_id": "sub_9138457632", "timestamp": "2026-02-01T22:44:01.338147Z", "human_label": 0, "comment": "run_tous_tests"}
+{"submission_id": "sub_7562223442", "timestamp": "2026-02-01T22:45:32.222838Z", "human_label": 0, "comment": "seed #1 OK"}
+{"submission_id": "sub_4042173276", "timestamp": "2026-02-01T22:45:33.255568Z", "human_label": 0, "comment": "seed #2 OK"}
+{"submission_id": "sub_8113050253", "timestamp": "2026-02-01T22:45:34.278694Z", "human_label": 0, "comment": "seed #3 OK"}
+{"submission_id": "sub_7111324430", "timestamp": "2026-02-01T22:45:35.285163Z", "human_label": 0, "comment": "seed #4 OK"}
+{"submission_id": "sub_6864948929", "timestamp": "2026-02-01T22:45:36.335395Z", "human_label": 0, "comment": "seed #5 OK"}
+{"submission_id": "sub_361796314", "timestamp": "2026-02-01T22:45:37.356223Z", "human_label": 0, "comment": "seed #6 OK"}
+{"submission_id": "sub_3750491956", "timestamp": "2026-02-01T22:45:38.424150Z", "human_label": 1, "comment": "seed #7 CHEAT"}
+{"submission_id": "sub_2946354635", "timestamp": "2026-02-01T22:45:39.432645Z", "human_label": 1, "comment": "seed #8 CHEAT"}
+{"submission_id": "sub_8607242361", "timestamp": "2026-02-01T22:45:40.456557Z", "human_label": 1, "comment": "seed #9 CHEAT"}
+{"submission_id": "sub_4563296795", "timestamp": "2026-02-01T22:45:41.455591Z", "human_label": 1, "comment": "seed #10 CHEAT"}
+{"submission_id": "sub_6802881392", "timestamp": "2026-02-01T22:45:42.474789Z", "human_label": 1, "comment": "seed #11 CHEAT"}
+{"submission_id": "sub_750318518", "timestamp": "2026-02-01T22:45:43.499018Z", "human_label": 1, "comment": "seed #12 CHEAT"}
+{"submission_id": "sub_7562223442", "timestamp": "2026-02-01T22:45:44.527283Z", "human_label": 0, "comment": "run_tous_tests"}
+{"submission_id": "test_hf_script_001", "timestamp": "2026-02-01T23:00:03.889227Z", "human_label": 0, "comment": "Test script Hugging Face"}
+{"submission_id": "test_hf_script_001", "timestamp": "2026-02-01T23:01:51.917070Z", "human_label": 0, "comment": "Test script Hugging Face"}
+{"submission_id": "sub_7924526107", "timestamp": "2026-02-01T23:02:24.133705Z", "human_label": 1, "comment": "seed #9 CHEAT"}
+{"submission_id": "sub_7734044453", "timestamp": "2026-02-01T23:02:25.157877Z", "human_label": 1, "comment": "seed #10 CHEAT"}
+{"submission_id": "sub_8506133918", "timestamp": "2026-02-01T23:02:26.168295Z", "human_label": 1, "comment": "seed #11 CHEAT"}
+{"submission_id": "sub_625352861", "timestamp": "2026-02-01T23:02:27.184243Z", "human_label": 1, "comment": "seed #12 CHEAT"}
+{"submission_id": "test_hf_script_001", "timestamp": "2026-02-01T23:02:31.756446Z", "human_label": 0, "comment": "Test script Hugging Face"}
+{"submission_id": "test_hf_script_001", "timestamp": "2026-02-01T23:16:22.401482Z", "human_label": 0, "comment": "Test script Hugging Face"}
+{"submission_id": "sub_4090391124", "timestamp": "2026-02-01T23:22:30.958431Z", "human_label": 0, "comment": "auto-label (score_ia=0.06)"}
+{"submission_id": "sub_176043568", "timestamp": "2026-02-01T23:22:31.486947Z", "human_label": 1, "comment": "auto-label (score_ia=0.93)"}
+{"submission_id": "sub_0", "timestamp": "2026-02-01T23:22:32.002169Z", "human_label": 0, "comment": "auto-label (score_ia=0.05)"}
+{"submission_id": "validation_test_1769988147", "timestamp": "2026-02-01T23:22:32.513701Z", "human_label": 0, "comment": "Test de validation automatique"}
+{"submission_id": "sub_4472341804", "timestamp": "2026-02-01T23:25:07.514518Z", "human_label": 0, "comment": "auto-label (score_ia=0.06)"}
+{"submission_id": "sub_1395245598", "timestamp": "2026-02-01T23:25:08.025833Z", "human_label": 1, "comment": "auto-label (score_ia=0.93)"}
+{"submission_id": "sub_0", "timestamp": "2026-02-01T23:25:08.550032Z", "human_label": 0, "comment": "auto-label (score_ia=0.05)"}
+{"submission_id": "validation_test_1769988304", "timestamp": "2026-02-01T23:25:09.064259Z", "human_label": 0, "comment": "Test de validation automatique"}

@@ -1,0 +1,17 @@
+Pour envoyer le modele sur Hugging Face (derniere etape) :
+
+1. Depuis Modele_Cheat, copie le code a jour dans hf-space :
+   Copy-Item ..\config.py . -Force
+   Copy-Item ..\requirements.txt . -Force
+   Copy-Item ..\Dockerfile . -Force
+   Copy-Item ..\src . -Recurse -Force
+   Copy-Item ..\scripts . -Recurse -Force
+   Copy-Item ..\data . -Recurse -Force
+
+2. Ouvre un terminal dans ce dossier : hf-space
+3. Lance : git add . ; git commit -m "Update API" ; git push origin main
+4. Quand Git demande "Password" : colle ton TOKEN Hugging Face (pas ton mot de passe)
+   -> Creer un token : https://huggingface.co/settings/tokens (droits "write")
+
+Apres le push, le Space build et l'API (avec /sync_storage et /retrain) sera sur :
+https://negzaoui-anti-cheat-coding.hf.space

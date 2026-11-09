@@ -1,0 +1,930 @@
+<!DOCTYPE html>
+<html lang="fr" class="dark">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Anti Cheat Code Analyzer</title>
+    <!-- Google Fonts for modern typography -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;600;700&display=swap"
+        rel="stylesheet">
+    <style>
+        /* Base Colors & Variables */
+        :root {
+            --bg-color: #0B0E14;
+            --surface-color-light: rgba(255, 255, 255, 0.05);
+            --surface-color: rgba(20, 25, 35, 0.7);
+            --border-color: rgba(255, 255, 255, 0.1);
+            --text-primary: #f8fafc;
+            --text-secondary: #94a3b8;
+            --accent-primary: #6366f1;
+            /* Indigo */
+            --accent-secondary: #8b5cf6;
+            /* Violet */
+            --gradient-primary: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+
+            /* Status Colors */
+            --status-ok: #10b981;
+            --status-suspect: #f59e0b;
+            --status-cheat: #ef4444;
+
+            /* Shadows & Blur */
+            --glass-blur: blur(12px);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.5), 0 2px 4px -1px rgba(0, 0, 0, 0.3);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.5), 0 4px 6px -2px rgba(0, 0, 0, 0.25);
+            --shadow-glow: 0 0 20px rgba(99, 102, 241, 0.4);
+        }
+
+        /* Reset & Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-primary);
+            line-height: 1.6;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Abstract Background Elements */
+        .bg-blob {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(80px);
+            z-index: -1;
+            opacity: 0.5;
+            animation: float 20s infinite alternate;
+        }
+
+        .blob-1 {
+            top: -10%;
+            left: -10%;
+            width: 500px;
+            height: 500px;
+            background: rgba(99, 102, 241, 0.3);
+        }
+
+        .blob-2 {
+            bottom: -20%;
+            right: -10%;
+            width: 600px;
+            height: 600px;
+            background: rgba(139, 92, 246, 0.2);
+            animation-delay: -5s;
+        }
+
+        @keyframes float {
+            0% {
+                transform: translate(0, 0) scale(1);
+            }
+
+            50% {
+                transform: translate(30px, -50px) scale(1.1);
+            }
+
+            100% {
+                transform: translate(-20px, 20px) scale(0.9);
+            }
+        }
+
+        /* Typography */
+        h1,
+        h2,
+        h3 {
+            font-family: 'Outfit', sans-serif;
+        }
+
+        /* Layout */
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 4rem 2rem;
+            width: 100%;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* Hero Section */
+        .hero {
+            text-align: center;
+            margin-bottom: 4rem;
+            animation: fadeInDown 0.8s ease-out forwards;
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: -0.02em;
+        }
+
+        .hero p {
+            font-size: 1.25rem;
+            color: var(--text-secondary);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Glassmorphism Cards */
+        .glass-card {
+            background: var(--surface-color);
+            backdrop-filter: var(--glass-blur);
+            -webkit-backdrop-filter: var(--glass-blur);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            padding: 2.5rem;
+            width: 100%;
+            box-shadow: var(--shadow-lg);
+            transition: transform 0.3s ease, border-color 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Input Section */
+        .input-section {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+            animation: fadeInUp 0.8s ease-out 0.2s forwards;
+            opacity: 0;
+        }
+
+        .input-group {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
+        .input-icon {
+            position: absolute;
+            left: 1rem;
+            color: var(--text-secondary);
+            display: flex;
+            align-items: center;
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 1.2rem 1.2rem 1.2rem 3rem;
+            background: rgba(0, 0, 0, 0.2);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            color: var(--text-primary);
+            font-size: 1rem;
+            font-family: inherit;
+            transition: all 0.3s ease;
+            outline: none;
+        }
+
+        input[type="text"]:focus {
+            border-color: var(--accent-primary);
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
+            background: rgba(0, 0, 0, 0.4);
+        }
+
+        input[type="text"]::placeholder {
+            color: rgba(148, 163, 184, 0.5);
+        }
+
+        button {
+            background: var(--gradient-primary);
+            color: white;
+            border: none;
+            padding: 1.2rem 2.5rem;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            font-family: inherit;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            width: 100%;
+            margin-top: 1rem;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(99, 102, 241, 0.4);
+            filter: brightness(1.1);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        button:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        /* Loading State */
+        .loading {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 3rem 0;
+            gap: 1.5rem;
+        }
+
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 3px solid rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            border-top-color: var(--accent-primary);
+            animation: spin 1s linear infinite;
+        }
+
+        .loading p {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+            animation: pulseText 2s infinite;
+        }
+
+        @keyframes spin {
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        @keyframes pulseText {
+
+            0%,
+            100% {
+                opacity: 0.6;
+            }
+
+            50% {
+                opacity: 1;
+            }
+        }
+
+        /* Results Section */
+        .results-section {
+            display: none;
+            margin-top: 3rem;
+            width: 100%;
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 1.5rem;
+            text-align: center;
+            transition: transform 0.2s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .stat-title {
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--text-secondary);
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-value {
+            font-size: 2.5rem;
+            font-weight: 700;
+            font-family: 'Outfit', sans-serif;
+        }
+
+        /* Verdict Colors */
+        .verdict-ok {
+            color: var(--status-ok);
+            text-shadow: 0 0 10px rgba(16, 185, 129, 0.3);
+        }
+
+        .verdict-suspect {
+            color: var(--status-suspect);
+            text-shadow: 0 0 10px rgba(245, 158, 11, 0.3);
+        }
+
+        .verdict-cheat {
+            color: var(--status-cheat);
+            text-shadow: 0 0 10px rgba(239, 68, 68, 0.3);
+        }
+
+        /* Progress Bar for Score */
+        .score-bar-container {
+            width: 100%;
+            height: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
+            margin-top: 1rem;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .score-bar {
+            height: 100%;
+            border-radius: 4px;
+            transition: width 1s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        /* Files List */
+        .files-section {
+            margin-top: 2rem;
+        }
+
+        .files-section h3 {
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+        }
+
+        .files-list {
+            background: rgba(0, 0, 0, 0.2);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .files-list::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .files-list::-webkit-scrollbar-track {
+            background: rgba(0, 0, 0, 0.1);
+            border-radius: 0 12px 12px 0;
+        }
+
+        .files-list::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 4px;
+        }
+
+        .file-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 1.5rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            transition: background 0.2s;
+        }
+
+        .file-item:last-child {
+            border-bottom: none;
+        }
+
+        .file-item:hover {
+            background: rgba(255, 255, 255, 0.03);
+        }
+
+        .file-path {
+            font-family: monospace;
+            color: var(--text-primary);
+            font-size: 0.9rem;
+            word-break: break-all;
+        }
+
+        .file-badge {
+            padding: 0.25rem 0.75rem;
+            border-radius: 999px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .badge-ok {
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--status-ok);
+            border: 1px solid rgba(16, 185, 129, 0.2);
+        }
+
+        .badge-suspect {
+            background: rgba(245, 158, 11, 0.1);
+            color: var(--status-suspect);
+            border: 1px solid rgba(245, 158, 11, 0.2);
+        }
+
+        .badge-cheat {
+            background: rgba(239, 68, 68, 0.1);
+            color: var(--status-cheat);
+            border: 1px solid rgba(239, 68, 68, 0.2);
+        }
+
+        /* Reasons Tags */
+        .reasons-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-top: 0.75rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .reason-tag {
+            display: inline-flex;
+            align-items: center;
+            background: rgba(245, 158, 11, 0.08);
+            /* slight amber tint */
+            border: 1px solid rgba(245, 158, 11, 0.2);
+            color: #d1d5db;
+            /* gray-300 */
+            font-size: 0.75rem;
+            padding: 0.25rem 0.75rem;
+            border-radius: 6px;
+            letter-spacing: 0.02em;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .reason-tag svg {
+            color: var(--status-suspect);
+        }
+
+        /* Error Message */
+        .error-message {
+            display: none;
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            color: #fca5a5;
+            padding: 1rem;
+            border-radius: 12px;
+            margin-top: 1rem;
+            text-align: center;
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+
+            .container {
+                padding: 2rem 1rem;
+            }
+
+            .glass-card {
+                padding: 1.5rem;
+            }
+
+            .file-item {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 0.5rem;
+            }
+
+            .file-badge {
+                align-self: flex-start;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Background Elements -->
+    <div class="bg-blob blob-1"></div>
+    <div class="bg-blob blob-2"></div>
+
+    <div class="container">
+        <!-- Hero Section -->
+        <header class="hero">
+            <h1>Anti-Cheat Analyst</h1>
+            <p>Intelligence Artificielle pour analyser le code source et détecter le plagiat ou le code généré
+                algorithmiquement.</p>
+        </header>
+
+        <!-- Main Card -->
+        <main class="glass-card">
+
+            <!-- Input Form -->
+            <div class="input-section" id="inputSection">
+                <div class="input-group">
+                    <div class="input-icon">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path
+                                d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22">
+                            </path>
+                        </svg>
+                    </div>
+                    <input type="text" id="targetRepoLink" name="random_name_to_bypass_autofill"
+                        placeholder="https://github.com/utilisateur/dossier" autocomplete="new-password"
+                        spellcheck="false" data-lpignore="true" data-1p-ignore="true">
+                </div>
+                <button id="analyzeBtn">
+                    Analyser le Référentiel
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="5" y1="12" x2="19" y2="12"></line>
+                        <polyline points="12 5 19 12 12 19"></polyline>
+                    </svg>
+                </button>
+                <div id="errorMessage" class="error-message"></div>
+            </div>
+
+            <!-- Loading State -->
+            <div class="loading" id="loadingSection">
+                <div class="spinner"></div>
+                <p>Analyse deep-learning en cours... (peut prendre jusqu'à 30s)</p>
+            </div>
+
+            <!-- Results Section -->
+            <div class="results-section" id="resultsSection">
+                <div class="dashboard-grid">
+                    <!-- Verdict Card -->
+                    <div class="stat-card">
+                        <div class="stat-title">Verdict Global</div>
+                        <div class="stat-value" id="finalVerdict">-</div>
+                    </div>
+
+                    <!-- AI Score Card -->
+                    <div class="stat-card">
+                        <div class="stat-title">Probabilité IA (Moyenne)</div>
+                        <div class="stat-value" id="avgScore">0%</div>
+                        <div class="score-bar-container">
+                            <div class="score-bar" id="scoreBar" style="width: 0%; background: var(--status-ok);"></div>
+                        </div>
+                    </div>
+
+                    <!-- Files Count Card -->
+                    <div class="stat-card">
+                        <div class="stat-title">Fichiers Analysés</div>
+                        <div class="stat-value" id="filesAnalyzed" style="color: var(--text-primary);">0</div>
+                    </div>
+                </div>
+
+                <!-- Global Summary Banner (Dynamically Populated) -->
+                <div id="globalSummaryContainer"
+                    style="display: none; background: rgba(245, 158, 11, 0.05); border: 1px solid rgba(245, 158, 11, 0.2); border-radius: 12px; padding: 1.5rem; margin-bottom: 2rem; position: relative;">
+                    <div style="display: flex; align-items: flex-start; gap: 1rem;">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--status-suspect)"
+                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                            style="flex-shrink: 0; margin-top: 2px;">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <line x1="12" y1="8" x2="12" y2="12"></line>
+                            <line x1="12" y1="16" x2="12.01" y2="16"></line>
+                        </svg>
+                        <div>
+                            <h4
+                                style="color: var(--text-primary); margin-bottom: 0.5rem; font-family: 'Outfit', sans-serif;">
+                                Aperçu Global du Projet</h4>
+                            <p id="globalSummaryText"
+                                style="color: var(--text-secondary); font-size: 0.95rem; line-height: 1.5;"></p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Detailed Files List -->
+                <div class="files-section">
+                    <h3>Détails par fichier</h3>
+                    <div class="files-list" id="filesList">
+                        <!-- Items injected dynamically -->
+                    </div>
+                </div>
+
+                <div style="text-align: center; margin-top: 2rem;">
+                    <button class="restart-btn" id="restartBtn" style="background: rgba(255,255,255,0.1); width: auto;">
+                        Analyser un autre référentiel
+                    </button>
+                </div>
+            </div>
+
+        </main>
+
+        <!-- Admin Retrain Section -->
+        <div style="margin-top: 2rem; text-align: center;">
+            <button id="adminRetrainBtn"
+                style="background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.3); color: #fca5a5; padding: 0.5rem 1rem; border-radius: 8px; font-size: 0.85rem; cursor: pointer; display: inline-flex; align-items: center; gap: 0.5rem; transition: all 0.2s;">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M21.5 2v6h-6M2.13 15.57a10 10 0 1 0 3.43-11.24L2.5 8"></path>
+                </svg>
+                Admin : Ré-entraîner le Modèle
+            </button>
+            <div id="retrainCounter"
+                style="margin-top: 0.5rem; font-size: 0.8rem; color: var(--text-secondary); opacity: 0.7;">
+                ⏳ Chargement du compteur...
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const urlInput = document.getElementById('targetRepoLink');
+            const analyzeBtn = document.getElementById('analyzeBtn');
+            const restartBtn = document.getElementById('restartBtn');
+            const inputSection = document.getElementById('inputSection');
+            const loadingSection = document.getElementById('loadingSection');
+            const resultsSection = document.getElementById('resultsSection');
+            const errorMsg = document.getElementById('errorMessage');
+            const adminRetrainBtn = document.getElementById('adminRetrainBtn');
+
+            // Result Elements
+            const valVerdict = document.getElementById('finalVerdict');
+            const valScore = document.getElementById('avgScore');
+            const scoreBar = document.getElementById('scoreBar');
+            const valFiles = document.getElementById('filesAnalyzed');
+            const filesList = document.getElementById('filesList');
+            const retrainCounter = document.getElementById('retrainCounter');
+
+            // Fetch and display the retrain counter
+            async function updateRetrainCounter() {
+                try {
+                    const res = await fetch('/auto_learn_status');
+                    const info = await res.json();
+                    const total = info.total_decisions || 0;
+                    const needed = 1;
+                    if (total >= needed) {
+                        retrainCounter.innerHTML = `✅ <strong>${total}</strong> échantillon(s) disponible(s) — Prêt pour le ré-entraînement !`;
+                        retrainCounter.style.color = '#4ade80';
+                    } else {
+                        const remaining = needed - total;
+                        retrainCounter.innerHTML = `📊 <strong>${total}</strong> échantillon(s) collecté(s) — Il manque <strong>${remaining}</strong> pour pouvoir ré-entraîner`;
+                        retrainCounter.style.color = '#fbbf24';
+                    }
+                } catch (e) {
+                    retrainCounter.textContent = '';
+                }
+            }
+            // Load counter on page start
+            updateRetrainCounter();
+
+            // Handle Input Enter Key
+            urlInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') analyzeBtn.click();
+            });
+
+            // Handle Restart
+            restartBtn.addEventListener('click', () => {
+                resultsSection.style.display = 'none';
+                urlInput.value = '';
+                inputSection.style.display = 'flex';
+                urlInput.focus();
+            });
+
+            // Handle Analysis
+            analyzeBtn.addEventListener('click', async () => {
+                const url = urlInput.value.trim();
+
+                if (!url) {
+                    showError("Veuillez entrer une URL GitHub valide.");
+                    return;
+                }
+
+                // UI Transition
+                errorMsg.style.display = 'none';
+                inputSection.style.display = 'none';
+                resultsSection.style.display = 'none';
+                loadingSection.style.display = 'flex';
+
+                try {
+                    // Make API Call
+                    const response = await fetch('/analyze_github', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({ github_url: url })
+                    });
+
+                    const data = await response.json();
+
+                    if (!response.ok) {
+                        throw new Error(data.detail || "Erreur lors de l'analyse du référentiel");
+                    }
+
+                    // Process Data
+                    displayResults(data);
+
+                    // Refresh the retrain counter (the analysis may have auto-validated)
+                    setTimeout(updateRetrainCounter, 2000);
+
+                } catch (err) {
+                    // Handle Error
+                    loadingSection.style.display = 'none';
+                    inputSection.style.display = 'flex';
+                    showError(err.message);
+                }
+            });
+
+            // Handle Admin Retrain
+            adminRetrainBtn.addEventListener('click', async () => {
+                const password = prompt("Mode Admin : Veuillez entrer le mot de passe pour déclencher le ré-entraînement du modèle IA.");
+                if (!password) return; // User cancelled
+
+                adminRetrainBtn.innerHTML = '<div class="spinner" style="width: 14px; height: 14px; border: 2px solid rgba(255,255,255,0.3); border-top-color: #fff;"></div> Entraînement en cours...';
+                adminRetrainBtn.disabled = true;
+
+                try {
+                    const response = await fetch('/retrain', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-Retrain-Secret': password
+                        }
+                    });
+
+                    const data = await response.json();
+
+                    if (!response.ok) {
+                        throw new Error(data.detail || "Erreur lors du ré-entraînement");
+                    }
+
+                    alert(`Succès! Le modèle a été ré-entraîné sur de nouvelles données et sauvegardé sur Hugging Face Hub (Version: latest).\n\nPrécision du nouveau modèle: ${(data.accuracy * 100).toFixed(2)}%`);
+
+                } catch (err) {
+                    alert("Erreur: " + err.message);
+                } finally {
+                    adminRetrainBtn.innerHTML = `
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M21.5 2v6h-6M2.13 15.57a10 10 0 1 0 3.43-11.24L2.5 8"></path>
+                        </svg>
+                        Admin : Ré-entraîner le Modèle
+                    `;
+                    adminRetrainBtn.disabled = false;
+                }
+            });
+
+            function showError(msg) {
+                errorMsg.textContent = msg;
+                errorMsg.style.display = 'block';
+            }
+
+            function displayResults(data) {
+                // Hide loading, show results
+                loadingSection.style.display = 'none';
+                resultsSection.style.display = 'block';
+
+                // Set Verdict
+                const verdict = data.final_verdict;
+                valVerdict.textContent = verdict;
+
+                // Clear old classes
+                valVerdict.className = 'stat-value';
+                let barColor = 'var(--status-ok)';
+
+                // Set Styling based on verdict
+                if (verdict === 'NE TRICHE PAS' || verdict === 'OK') {
+                    valVerdict.classList.add('verdict-ok');
+                    barColor = 'var(--status-ok)';
+                } else if (verdict === 'SUSPECT') {
+                    valVerdict.classList.add('verdict-suspect');
+                    barColor = 'var(--status-suspect)';
+                } else {
+                    valVerdict.classList.add('verdict-cheat');
+                    barColor = 'var(--status-cheat)';
+                }
+
+                // Set Score and Progress Bar
+                const percent = Math.round(data.avg_score_ia * 100);
+                setTimeout(() => {
+                    valScore.textContent = `${percent}%`;
+                    scoreBar.style.width = `${percent}%`;
+                    scoreBar.style.background = barColor;
+                }, 100); // slight delay for animation
+
+                // Set File Count
+                valFiles.textContent = data.files_analyzed;
+
+                // Set Global Summary
+                const summaryContainer = document.getElementById('globalSummaryContainer');
+                const summaryText = document.getElementById('globalSummaryText');
+                if (data.global_summary) {
+                    summaryText.innerHTML = data.global_summary.replace(/\*\*(.*?)\*\*/g, '<strong style="color: var(--text-primary);">$1</strong>');
+                    summaryContainer.style.display = 'block';
+                } else {
+                    summaryContainer.style.display = 'none';
+                }
+
+                // Build Files List
+                filesList.innerHTML = '';
+
+                if (data.details && data.details.length > 0) {
+                    data.details.forEach(file => {
+                        const filePercent = Math.round(file.score_ia * 100);
+
+                        let badgeClass = 'badge-ok';
+                        let fileVerdict = 'OK';
+
+                        if (file.score_ia >= 0.65) {
+                            badgeClass = 'badge-cheat';
+                            fileVerdict = 'IA';
+                        } else if (file.score_ia >= 0.35) {
+                            badgeClass = 'badge-suspect';
+                            fileVerdict = 'SUSPECT';
+                        }
+
+                        // Build Reasons HTML
+                        let reasonsHtml = '';
+                        if (file.reasons && file.reasons.length > 0) {
+                            const reasonsItems = file.reasons.map(r => `
+                                <div class="reason-tag">
+                                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right:4px;">
+                                        <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
+                                        <line x1="12" y1="9" x2="12" y2="13"></line>
+                                        <line x1="12" y1="17" x2="12.01" y2="17"></line>
+                                    </svg>
+                                    ${r}
+                                </div>
+                            `).join('');
+                            reasonsHtml = `<div class="reasons-container">${reasonsItems}</div>`;
+                        }
+
+                        const item = document.createElement('div');
+                        item.className = 'file-item';
+                        item.innerHTML = `
+                            <div style="flex: 1;">
+                                <div class="file-path">${escapeHtml(file.file)}</div>
+                                ${reasonsHtml}
+                            </div>
+                            <div style="display: flex; align-items: center; gap: 1rem; margin-left: 1rem;">
+                                <span style="font-family: monospace; color: var(--text-secondary); width: 40px; text-align: right;">${filePercent}%</span>
+                                <span class="file-badge ${badgeClass}">${fileVerdict}</span>
+                            </div>
+                        `;
+                        filesList.appendChild(item);
+                    });
+                } else {
+                    filesList.innerHTML = '<div style="padding: 1.5rem; text-align: center; color: var(--text-secondary);">Aucun fichier analysé</div>';
+                }
+            }
+
+            // Utils
+            function escapeHtml(unsafe) {
+                return unsafe
+                    .replace(/&/g, "&amp;")
+                    .replace(/</g, "&lt;")
+                    .replace(/>/g, "&gt;")
+                    .replace(/"/g, "&quot;")
+                    .replace(/'/g, "&#039;");
+            }
+        });
+    </script>
+</body>
+
+</html>

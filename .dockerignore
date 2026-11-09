@@ -1,0 +1,11 @@
+venv
+__pycache__
+*.pyc
+.git
+.gitignore
+storage/*.jsonl
+*.md
+!README.md
+.cursor
+.venv
+env
